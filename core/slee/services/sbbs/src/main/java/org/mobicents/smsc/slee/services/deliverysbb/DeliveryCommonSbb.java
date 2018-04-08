@@ -1169,6 +1169,27 @@ public abstract class DeliveryCommonSbb implements Sbb {
             if (isCheckScheduleDeliveryTimeNeeded)
                 newDueDate = MessageUtil.checkScheduleDeliveryTime(lstTempFailured, newDueDate);
 
+            /*
+            If any SMS's that failed will have a new due date greater than the VP, 
+            set the due date to be equal to VP, unless it was already past VP, then just increase by SecondDueDelay
+            */
+            for (Sms sms : lstTempFailured) {
+                if (newDueDate.after(sms.getValidityPeriod()))
+                {
+                    if (sms.getValidityPeriod().after(smsSet.getDueDate()))
+                    {
+                        newDueDate = sms.getValidityPeriod();
+                        newDueDelay = smscPropertiesManagement.getSecondDueDelay();
+                        break;
+                    }
+                    else
+                    {
+                        newDueDate = new Date(smsSet.getDueDate().getTime() + 1000*smscPropertiesManagement.getSecondDueDelay());
+                        newDueDelay = smscPropertiesManagement.getSecondDueDelay();
+                    }
+                }
+            }
+    
             smsSet.setDueDate(newDueDate);
             smsSet.setDueDelay(newDueDelay);
             long dueSlot = persistence.c2_getDueSlotForTime(newDueDate);

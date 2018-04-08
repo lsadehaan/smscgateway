@@ -585,6 +585,7 @@ public class MessageUtil {
     public static final String DELIVERY_ACK_TEXT = " text:";
     public static final String DELIVERY_ACK_STATE_DELIVERED = "DELIVRD";
     public static final String DELIVERY_ACK_STATE_UNDELIVERABLE = "UNDELIV";
+    public static final String DELIVERY_ACK_STATE_EXPIRED = "EXPIRED";
     public static final String DELIVERY_ACK_STATE_ENROUTE = "ENROUTE";
     public static final byte ESME_DELIVERY_ACK = 0x04;
     public static final SimpleDateFormat DELIVERY_ACK_DATE_FORMAT = new SimpleDateFormat("yyMMddHHmm");
@@ -660,7 +661,7 @@ public class MessageUtil {
         receipt.setValidityPeriod(validityPeriod);
 
         String rcpt = createDeliveryReceiptMessage(sms.getMessageIdText(), sms.getSubmitDate(),
-                new Timestamp(System.currentTimeMillis()), sms.getSmsSet().getStatus().getCode(), sms.getShortMessageText(),
+                new Timestamp(System.currentTimeMillis()), sms.getSmsSet().getStatus(), sms.getShortMessageText(),
                 delivered, extraString, tempFailure);
 
         // TODO: now we are sending all in GSM7 encoding
@@ -676,7 +677,7 @@ public class MessageUtil {
     }
 
     public static String createDeliveryReceiptMessage(String messageId, Date submitDate, Date deliveryDate,
-            int errorCode, String origMsgText, boolean delivered, String extraString, boolean tempFailure) {
+            ErrorCode errorCode, String origMsgText, boolean delivered, String extraString, boolean tempFailure) {
         StringBuffer sb = new StringBuffer();
 
         sb.append(DELIVERY_ACK_ID);
@@ -700,13 +701,20 @@ public class MessageUtil {
             sb.append("000");
         } else {
             if (!tempFailure) {
-                sb.append(DELIVERY_ACK_STATE_UNDELIVERABLE);
+                if (errorCode == ErrorCode.VALIDITY_PERIOD_EXPIRED)
+                {
+                    sb.append(DELIVERY_ACK_STATE_EXPIRED);
+                }
+                else
+                {
+                    sb.append(DELIVERY_ACK_STATE_UNDELIVERABLE);
+                }
             } else {
                 sb.append(DELIVERY_ACK_STATE_ENROUTE);
             }
             sb.append(DELIVERY_ACK_ERR);
             // sb.append(errorCode != null ? errorCode.getCodeText() : "null");
-            sb.append(String.format("%03d", errorCode));
+            sb.append(String.format("%03d", errorCode.getCode()));
         }
         sb.append(DELIVERY_ACK_TEXT);
         sb.append(getFirst20CharOfSMS(origMsgText));

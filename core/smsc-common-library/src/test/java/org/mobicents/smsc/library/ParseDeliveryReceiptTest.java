@@ -142,7 +142,7 @@ public class ParseDeliveryReceiptTest {
     @Test(groups = { "ParseDeliveryReceipt" })
     public void testEncodeDeliveryReceipt() {
         String mId = MessageUtil.createMessageIdString(201);
-        String s1 = MessageUtil.createDeliveryReceiptMessage(mId, new Date(), new Date(), ErrorCode.REJECT_INCOMING_MPROC.getCode(),
+        String s1 = MessageUtil.createDeliveryReceiptMessage(mId, new Date(), new Date(), ErrorCode.REJECT_INCOMING_MPROC,
                 "www www eee", true, null, false);
     }
 

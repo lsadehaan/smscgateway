@@ -50,7 +50,7 @@
     <property name="restcomm-smpp-ra.build-number" value="128" />
     <property name="restcomm-smpp-ra.version" value="7.1.0-${restcomm-smpp-ra.build-number}" />
     <!-- Cassandra community version -->
-    <property name="community-cassandra.version" value="3.11.0" />
+    <property name="community-cassandra.version" value="3.11.2" />
     <!-- 2.2.6 -->
     <!-- JainSlee SIP RA DU - we do not use it now - getting from SLEE binaries -->
     <property name="restcomm-slee-sip11.build-number" value="94" />

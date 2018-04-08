@@ -1608,7 +1608,7 @@ public abstract class TxSmppServerSbb extends SubmitCommonSbb implements Sbb {
                     String messageIdStr = MessageUtil.createMessageIdString(messageId);
                     String updatedReceiptText = MessageUtil.createDeliveryReceiptMessage(messageIdStr,
                             deliveryReceiptData.getSubmitDate(), deliveryReceiptData.getDoneDate(),
-                            deliveryReceiptData.getError(), deliveryReceiptData.getText(),
+                            ErrorCode.fromInt(deliveryReceiptData.getError()), deliveryReceiptData.getText(),
                             deliveryReceiptData.getStatus().equals(MessageUtil.DELIVERY_ACK_STATE_DELIVERED), null,
                             deliveryReceiptData.getStatus().equals(MessageUtil.DELIVERY_ACK_STATE_ENROUTE));
                     sms0.setShortMessageText(updatedReceiptText);

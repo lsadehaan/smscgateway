@@ -118,7 +118,7 @@ public class CassandraTest {
         long dueSlot = sbb.c2_getDueSlotForTime(dt);
         Date dt2 = sbb.c2_getTimeForDueSlot(dueSlot);
         long dueSlot2 = sbb.c2_getDueSlotForTime(dt2);
-        Date dt3 = sbb.c2_getTimeForDueSlot(dueSlot);
+        Date dt3 = sbb.c2_getTimeForDueSlot(dueSlot2);
 
         assertEquals(dueSlot, dueSlot2);
         assertTrue(dt2.equals(dt3));
